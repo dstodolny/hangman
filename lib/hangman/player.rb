@@ -9,7 +9,7 @@ module Hangman
     def guess
       loop do
         letter = gets.chomp
-        return letter.downcase if letter.match(/^[a-zA-z]$/)
+        return letter.downcase if letter.match(/^[a-zA-z]$/) || letter == 'load' || letter =='save' || letter == 'quit'
         puts "You can choose only one letter. Try again."
       end 
     end

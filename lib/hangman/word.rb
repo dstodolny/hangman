@@ -1,30 +1,40 @@
 module Hangman
   class Word
-    attr_reader :result, :incorrect_letters
+    attr_reader :to_guess, :result, :incorrect
 
     def initialize
-      @word_to_guess = random_word
-      @result = '_' * @word_to_guess.size
-      @incorrect_letters = []
+      @to_guess = random_word
+      @result = '_' * @to_guess.size
+      @incorrect = []
     end
 
     def play(letter)
-      @word_to_guess.include?(letter) ? add_to_result(letter) : add_to_incorrect_letters(letter)
-      feedback
+      if to_guess.include?(letter)
+        add_to_result(letter)
+        true
+      else
+        add_to_incorrect(letter)
+        false
+      end
+    end
+
+    def display
+      puts "Word:\t\t#{result.split('').join(' ')}"
+      puts "Incorrect:\t#{incorrect.sort.join(', ')}"
+    end
+
+    def correct?
+      result == to_guess
     end
 
     private
 
-    def feedback
-      "#{result.split('').join(' ')}\tincorrect: #{incorrect_letters.sort.join(', ')}"
-    end
-
     def add_to_result(letter)
-      @word_to_guess.split('').each_with_index { |e, i| result[i] = letter if e == letter }
+      to_guess.split('').each_with_index { |e, i| result[i] = letter if e == letter }
     end
 
-    def add_to_incorrect_letters(letter)
-      incorrect_letters.push(letter)
+    def add_to_incorrect(letter)
+      incorrect.push(letter)
     end
 
     def random_word
