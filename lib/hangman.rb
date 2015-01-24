@@ -1,4 +1,5 @@
 require 'open-uri'
+require 'pstore'
 
 require_relative 'hangman/version'
 

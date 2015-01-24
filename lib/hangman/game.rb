@@ -15,8 +15,14 @@ module Hangman
         solicit_move
         letter = @player.guess
         if letter == 'load'
-          puts 'Game loaded'
+          if File.exists?('saved_game')
+            load_game
+            puts 'Game loaded'
+          else
+            puts 'No file to load'
+          end
         elsif letter == 'save'
+          save_game
           puts 'Game saved'
         elsif letter == 'quit'
           puts 'Thanks for playing. Bye!'
@@ -45,8 +51,24 @@ module Hangman
       puts "Hangman:\t|" + 'x' * @attempt + "." * (@max_moves - @attempt) + '|'
     end
 
-    def game_over
+    def load_game
+      store = PStore.new('saved_game')
+      store.transaction do
+        @word = store[:word]
+        @player = store[:player]
+        @attempt = store[:attempt]
+        @max_moves = store[:max_moves]
+      end
+    end
 
+    def save_game
+      store = PStore.new('saved_game')
+      store.transaction do 
+        store[:word] = @word
+        store[:player] = @player
+        store[:attempt] = @attempt
+        store[:max_moves] = @max_moves
+      end
     end
   end
 end
